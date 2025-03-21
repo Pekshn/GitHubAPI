@@ -1,0 +1,11 @@
+//
+//  Development.xcconfig
+//  GitHubAPI
+//
+//  Created by Petar  on 21.3.25..
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+SERVER_BASE_URL=https:/$()/api.github.com
