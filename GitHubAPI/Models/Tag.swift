@@ -7,9 +7,10 @@
 
 import Foundation
 
-struct Tag: Codable {
+struct Tag: Codable, Identifiable {
     
     //MARK: - Properties
+    var id: String { "\(name)-\(commit.sha)" }
     let name: String
     let commit: Commit
 }

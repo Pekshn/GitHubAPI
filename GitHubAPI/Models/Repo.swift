@@ -13,4 +13,5 @@ struct Repo: Codable, Identifiable {
     let id: Int
     let name: String
     let openIssuesCount: Int
+    let owner: Owner
 }

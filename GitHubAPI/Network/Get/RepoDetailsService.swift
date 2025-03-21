@@ -13,7 +13,7 @@ class RepoDetailsService {
     private let networkService: NetworkService
     
     //MARK: - Init
-    init(networkService: NetworkService) {
+    init(networkService: NetworkService = Webservice.shared) {
         self.networkService = networkService
     }
     

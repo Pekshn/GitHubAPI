@@ -9,15 +9,26 @@ import SwiftUI
 
 struct RepoListView: View {
     
+    //MARK: - Properties
+    @StateObject private var viewModel = RepoListViewModel()
+    
     //MARK: - Body
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            List(viewModel.repoItems) { repoVM in
+                NavigationLink(destination: RepoDetailsView(viewModel: repoVM)) {
+                    VStack(alignment: .leading) {
+                        Text(repoVM.repo.name)
+                            .font(.headline)
+                    }
+                }
+                .padding()
+            }
+            .task {
+                await viewModel.fetchUserRepos(username: "octocat")
+            }
+            .navigationTitle("Repo items")
         }
-        .padding()
     }
 }
 
