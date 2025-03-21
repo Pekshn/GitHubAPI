@@ -16,4 +16,12 @@ struct RequestEndpoint {
     static func repoList(username: String) -> URL? {
         return URL(string: "\(baseURL)/users/\(username)/repos")
     }
+    
+    static func repoDetails(owner: String, repoName: String) -> URL? {
+        return URL(string: "\(baseURL)/repos/\(owner)/\(repoName)")
+    }
+    
+    static func repoTags(owner: String, repoName: String) -> URL? {
+        return URL(string: "\(baseURL)/repos/\(owner)/\(repoName)/tags")
+    }
 }
