@@ -36,7 +36,7 @@ struct RepoItemView: View {
                         .foregroundColor(.cyan)
                         .frame(width: 20, height: 20, alignment: .center)
                     
-                    Text(repoVM.name)
+                    Text(repoVM.repoName)
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundColor(Color(.label))
@@ -51,7 +51,7 @@ struct RepoItemView: View {
                         .foregroundStyle(.red)
                         .frame(width: 20, height: 20, alignment: .center)
                     
-                    Text("Open issues count: \(repoVM.issuesCount)")
+                    Text("Open issues count: \(repoVM.openIssuesCount)")
                         .font(.subheadline)
                         .foregroundColor(.primary)
                     
@@ -73,7 +73,7 @@ struct RepoItemView: View {
 //MARK: - Preview
 struct RepoItemView_Previews: PreviewProvider {
     static var previews: some View {
-        let repo = Repo(id: 132935648, name: "boysenberry-repo-1", openIssuesCount: 112, owner: Owner(name: "octocat"))
+        let repo = Repo(id: 132935648, name: "boysenberry-repo-1", openIssuesCount: 112, owner: Owner(name: "octocat"), avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4")
         RepoItemView(repoVM: RepoDetailsViewModel(repo: repo))
             .previewLayout(.sizeThatFits)
             .padding()

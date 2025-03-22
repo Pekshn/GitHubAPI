@@ -14,4 +14,5 @@ struct Repo: Codable, Identifiable {
     let name: String
     let openIssuesCount: Int
     let owner: Owner
+    let avatarUrl: String?
 }

@@ -19,8 +19,10 @@ class RepoDetailsViewModel: ObservableObject, Identifiable {
     
     //Computed
     var id: Int { repo.id }
-    var name: String { repo.name }
-    var issuesCount: String { "\(repo.openIssuesCount)" }
+    var repoName: String { repo.name }
+    var openIssuesCount: String { "\(repo.openIssuesCount)" }
+    var username: String { repo.owner.name }
+    var avatarString: String? { repo.avatarUrl }
     
     //MARK: - Init
     init(repo: Repo, repoDetailsService: RepoDetailsService = RepoDetailsService(), repoTagsService: RepoTagsService = RepoTagsService()) {
