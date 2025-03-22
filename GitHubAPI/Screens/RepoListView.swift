@@ -12,6 +12,7 @@ struct RepoListView: View {
     //MARK: - Properties
     @StateObject private var viewModel = RepoListViewModel()
     @State private var username = Constants.defaultUsername
+    @Environment(\.colorScheme) private var colorScheme
     
     //MARK: - Body
     var body: some View {
@@ -55,6 +56,8 @@ struct RepoListView: View {
                 Alert(title: Text("Error"), message: Text("\(error.message)"), dismissButton: .default(Text("OK")))
             }
         } //: NavigationStack
+        .tint(colorScheme == .dark ? .white : .black)
+        .accentColor(colorScheme == .dark ? .white : .black) //iOS 16.0
     }
 }
 
