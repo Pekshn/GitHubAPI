@@ -15,8 +15,12 @@ class RepoDetailsViewModel: ObservableObject, Identifiable {
     @Published var error: ApplicationError?
     private let repoDetailsService: RepoDetailsService
     private let repoTagsService: RepoTagsService
-    private(set) var repo: Repo
+    private let repo: Repo
+    
+    //Computed
     var id: Int { repo.id }
+    var name: String { repo.name }
+    var issuesCount: String { "\(repo.openIssuesCount)" }
     
     //MARK: - Init
     init(repo: Repo, repoDetailsService: RepoDetailsService = RepoDetailsService(), repoTagsService: RepoTagsService = RepoTagsService()) {

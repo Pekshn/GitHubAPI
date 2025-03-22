@@ -13,6 +13,8 @@ class RepoListViewModel: ObservableObject {
     //MARK: - Properties
     @Published private(set) var repoItems: [RepoDetailsViewModel] = []
     @Published var error: ApplicationError?
+    @Published var isLoading: Bool = false
+    @Published var reposCount: String = ""
     private let repoListService: RepoListService
     
     //MARK: - Init
@@ -26,13 +28,16 @@ extension RepoListViewModel {
     
     //Fetch User Repos
     func fetchUserRepos(username: String) async {
+        self.isLoading = true
         do {
             let repos = try await repoListService.fetchUserRepos(username: username)
             await MainActor.run {
                 self.repoItems = repos.map { RepoDetailsViewModel(repo: $0) }
+                self.reposCount = "Repositories count: \(repos.count)"
             }
         } catch {
             self.error = ApplicationError.from(error: error)
         }
+        self.isLoading = false
     }
 }
