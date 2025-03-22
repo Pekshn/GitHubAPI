@@ -39,7 +39,6 @@ struct RepoItemView: View {
                     Text(repoVM.repoName)
                         .font(.headline)
                         .fontWeight(.bold)
-                        .foregroundColor(Color(.label))
                     
                     Spacer()
                 } //: HStack

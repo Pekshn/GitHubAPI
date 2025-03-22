@@ -7,7 +7,6 @@
 
 import Foundation
 
-@MainActor
 class RepoListViewModel: ObservableObject {
     
     //MARK: - Properties
@@ -36,7 +35,9 @@ extension RepoListViewModel {
                 self.reposCount = "Repositories count: \(repos.count)"
             }
         } catch {
-            self.error = ApplicationError.from(error: error)
+            await MainActor.run {
+                self.error = ApplicationError.from(error: error)
+            }
         }
         self.isLoading = false
     }

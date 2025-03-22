@@ -11,37 +11,79 @@ struct RepoDetailsView: View {
     
     //MARK: - Properties
     @StateObject var viewModel: RepoDetailsViewModel
+    @Environment(\.colorScheme) private var colorScheme
     
+    //Computed
+    var headerBgColor: Color {
+        let light = Color(.lightGray)
+        let dark = Color(UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0))
+        return colorScheme == .light ? light : dark
+    }
+    
+    //MARK: - Body
     var body: some View {
-        ScrollView {
-            VStack {
-                if let repoDetails = viewModel.repoDetails {
-                    Text("name: \(repoDetails.name)")
-                        .font(.largeTitle)
-                    Text("forksCount: \(repoDetails.forksCount)")
-                    Text("watchersCount: \(repoDetails.watchersCount)")
-                } else {
-                    Text("Details Loading...")
-                        .onAppear {
-                            Task {
-                                await viewModel.fetchDetails()
-                                await viewModel.fetchTags()
-                            }
-                        }
-                }
-                Text("Tags:")
-                ForEach(viewModel.tags, id: \.id) { tag in
-                    Text("Tag Name: \(tag.name)")
-                    Text("Tag Commit: \(tag.commit.sha)")
-                }
-            }
-        }
+        ZStack {
+            headerBgColor
+                .ignoresSafeArea(.all, edges: .all)
+            
+            VStack(spacing: 0) {
+                ScrollView(showsIndicators: false) {
+                    VStack() {
+                        //Repo name
+                        RepoNameView(repoName: viewModel.repoName)
+                        
+                        //Avatar image
+                        AvatarView(avatarUrl: viewModel.avatarString ?? "", bgColor: headerBgColor)
+                            .zIndex(1)
+                        
+                        VStack {
+                            //Username
+                            Text(viewModel.username)
+                                .font(.system(.title, weight: .heavy))
+                                .fontWeight(.bold)
+                                .padding(.top, 20)
+                                .padding(.bottom, 10)
+                            
+                            Color(.lightGray).opacity(0.5)
+                                .frame(height: 1)
+                                .padding(.vertical)
+                            
+                            //Forks and Watchers
+                            ForksAndWatchersView(viewModel: viewModel)
+                            
+                            //Tags title
+                            TagsTitleView()
+                            
+                            //Tag items
+                            TagsView(viewModel: viewModel)
+                        } //: VStack
+                        .background(Color(.systemBackground))
+                        .background(
+                            Color(.systemBackground)
+                                .clipShape(CustomShape())
+                                .padding(.top, -90)
+                        )
+                        .zIndex(0)
+                    } //: VStack
+                } //: ScrollView
+                
+                //Copyright footer
+                CopyrightView(bgColor: headerBgColor)
+            } //: VStack
+        } //: ZStack
+        .task {
+            await viewModel.fetchDetails()
+            await viewModel.fetchTags()
+        } //: task
         .alert(item: $viewModel.error) { error in
             Alert(title: Text("Error"), message: Text("\(error.message)"), dismissButton: .default(Text("OK")))
-        }
+        } //: alert
     }
 }
 
+//MARK: - Preview
 #Preview {
-    RepoDetailsView(viewModel: RepoDetailsViewModel(repo: Repo(id: 64778136, name: "linguist", openIssuesCount: 21, owner: Owner(name: "octocat"), avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4")))
+    NavigationStack {
+        RepoDetailsView(viewModel: RepoDetailsViewModel(repo: Repo(id: 64778136, name: "linguist", openIssuesCount: 21, owner: Owner(name: "octocat"), avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4")))
+    }
 }

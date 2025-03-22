@@ -10,8 +10,10 @@ import Foundation
 class RepoDetailsViewModel: ObservableObject, Identifiable {
     
     //MARK: - Properties
-    @Published private(set) var repoDetails: RepoDetails?
+    @Published var forksCount: String = " "
+    @Published var watchersCount: String = " "
     @Published private(set) var tags: [Tag] = []
+    @Published var tagsLoading: Bool = false
     @Published var error: ApplicationError?
     private let repoDetailsService: RepoDetailsService
     private let repoTagsService: RepoTagsService
@@ -40,7 +42,8 @@ extension RepoDetailsViewModel {
         do {
             let details = try await repoDetailsService.fetchRepoDetails(owner: repo.owner.name, repoName: repo.name)
             await MainActor.run {
-                self.repoDetails = details
+                self.forksCount = "\(details.forksCount)"
+                self.watchersCount = "\(details.watchersCount)"
             }
         } catch {
             await MainActor.run {
@@ -51,13 +54,17 @@ extension RepoDetailsViewModel {
     
     //Fetch Tags
     func fetchTags() async {
+        self.tagsLoading = true
         do {
             let tags = try await repoTagsService.fetchRepoTags(owner: repo.owner.name, repoName: repo.name)
             await MainActor.run {
                 self.tags = tags
             }
         } catch {
-            self.error = ApplicationError.from(error: error)
+            await MainActor.run {
+                self.error = ApplicationError.from(error: error)
+            }
         }
+        self.tagsLoading = false
     }
 }
