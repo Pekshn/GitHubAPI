@@ -11,6 +11,7 @@ struct RepoListView: View {
     
     //MARK: - Properties
     @StateObject private var viewModel = RepoListViewModel()
+    @State private var username = Constants.defaultUsername
     
     //MARK: - Body
     var body: some View {
@@ -25,9 +26,12 @@ struct RepoListView: View {
                 .padding()
             }
             .task {
-                await viewModel.fetchUserRepos(username: "octocat")
+                await viewModel.fetchUserRepos(username: currentUser)
             }
             .navigationTitle("Repo items")
+            .alert(item: $viewModel.error) { error in
+                Alert(title: Text("Error"), message: Text("\(error.message)"), dismissButton: .default(Text("OK")))
+            }
         }
     }
 }

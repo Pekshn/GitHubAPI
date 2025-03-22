@@ -20,7 +20,7 @@ class RepoTagsService {
     //MARK: - API Call
     func fetchRepoTags(owner: String, repoName: String) async throws -> [Tag] {
         guard let url = RequestEndpoint.repoTags(owner: owner, repoName: repoName) else {
-            throw NetworkError.badURL
+            throw ApplicationError(message: ErrorMessage.badUrl, statusCode: -1)
         }
         let config = RequestConfig(url: url)
         return try await networkService.makeRequest(config: config, responseType: [Tag].self)

@@ -13,28 +13,32 @@ struct RepoDetailsView: View {
     @StateObject var viewModel: RepoDetailsViewModel
     
     var body: some View {
-        VStack {
-            if let repoDetails = viewModel.repoDetails {
-                Text("name: \(repoDetails.name)")
-                    .font(.largeTitle)
-                Text("forksCount: \(repoDetails.forksCount)")
-                Text("watchersCount: \(repoDetails.watchersCount)")
-            } else {
-                Text("Details Loading...")
-                    .onAppear {
-                        Task {
-                            await viewModel.fetchDetails()
-                            await viewModel.fetchTags()
+        ScrollView {
+            VStack {
+                if let repoDetails = viewModel.repoDetails {
+                    Text("name: \(repoDetails.name)")
+                        .font(.largeTitle)
+                    Text("forksCount: \(repoDetails.forksCount)")
+                    Text("watchersCount: \(repoDetails.watchersCount)")
+                } else {
+                    Text("Details Loading...")
+                        .onAppear {
+                            Task {
+                                await viewModel.fetchDetails()
+                                await viewModel.fetchTags()
+                            }
                         }
-                    }
-            }
-            Text("Tags:")
-            List(viewModel.tags, id: \.id) { tag in
-                Text("Tag Name: \(tag.name)")
-                Text("Tag Commit: \(tag.commit.sha)")
+                }
+                Text("Tags:")
+                ForEach(viewModel.tags, id: \.id) { tag in
+                    Text("Tag Name: \(tag.name)")
+                    Text("Tag Commit: \(tag.commit.sha)")
+                }
             }
         }
-        .navigationTitle("Repo Details")
+        .alert(item: $viewModel.error) { error in
+            Alert(title: Text("Error"), message: Text("\(error.message)"), dismissButton: .default(Text("OK")))
+        }
     }
 }
 

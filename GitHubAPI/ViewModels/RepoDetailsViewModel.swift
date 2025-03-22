@@ -12,7 +12,7 @@ class RepoDetailsViewModel: ObservableObject, Identifiable {
     //MARK: - Properties
     @Published private(set) var repoDetails: RepoDetails?
     @Published private(set) var tags: [Tag] = []
-    @Published private(set) var errorMessage: String?
+    @Published var error: ApplicationError?
     private let repoDetailsService: RepoDetailsService
     private let repoTagsService: RepoTagsService
     private(set) var repo: Repo
@@ -33,10 +33,17 @@ extension RepoDetailsViewModel {
     func fetchDetails() async {
         do {
             let details = try await repoDetailsService.fetchRepoDetails(owner: repo.owner.name, repoName: repo.name)
-            self.repoDetails = details
+            await MainActor.run {
+                self.repoDetails = details
+            }
+        } catch let error as ApplicationError {
+            await MainActor.run {
+                self.error = error
+            }
         } catch {
-            //TODO: - Refactor this later
-            self.errorMessage = "Failed to load repo details"
+            await MainActor.run {
+                self.error = ApplicationError(message: "\(error.localizedDescription)", statusCode: -1)
+            }
         }
     }
     
@@ -44,10 +51,17 @@ extension RepoDetailsViewModel {
     func fetchTags() async {
         do {
             let tags = try await repoTagsService.fetchRepoTags(owner: repo.owner.name, repoName: repo.name)
-            self.tags = tags
+            await MainActor.run {
+                self.tags = tags
+            }
+        } catch let error as ApplicationError {
+            await MainActor.run {
+                self.error = error
+            }
         } catch {
-            //TODO: - Refactor this later
-            self.errorMessage = "Failed to load repo tags"
+            await MainActor.run {
+                self.error = ApplicationError(message: "\(error.localizedDescription)", statusCode: -1)
+            }
         }
     }
 }

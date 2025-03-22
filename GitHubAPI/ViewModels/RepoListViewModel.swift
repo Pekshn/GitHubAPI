@@ -7,11 +7,12 @@
 
 import Foundation
 
+@MainActor
 class RepoListViewModel: ObservableObject {
     
     //MARK: - Properties
     @Published private(set) var repoItems: [RepoDetailsViewModel] = []
-    @Published private(set) var errorMessage: String?
+    @Published var error: ApplicationError?
     private let repoListService: RepoListService
     
     //MARK: - Init
@@ -27,10 +28,17 @@ extension RepoListViewModel {
     func fetchUserRepos(username: String) async {
         do {
             let repos = try await repoListService.fetchUserRepos(username: username)
-            self.repoItems = repos.map { RepoDetailsViewModel(repo: $0) }
+            await MainActor.run {
+                self.repoItems = repos.map { RepoDetailsViewModel(repo: $0) }
+            }
+        } catch let error as ApplicationError {
+            await MainActor.run {
+                self.error = error
+            }
         } catch {
-            //TODO: - Refactor this later
-            self.errorMessage = "Failed to load repos"
+            await MainActor.run {
+                self.error = ApplicationError(message: "\(error.localizedDescription)", statusCode: -1)
+            }
         }
     }
 }

@@ -39,7 +39,7 @@ class Webservice: NetworkService {
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: params, options: [])
             } catch {
-                throw NetworkError.encodingError
+                throw ApplicationError(message: ErrorMessage.encodingError, statusCode: -1)
             }
         }
         
@@ -53,21 +53,19 @@ class Webservice: NetworkService {
             
             //Response validation
             guard let httpResponse = response as? HTTPURLResponse else {
-                throw NetworkError.badRequest
+                throw ApplicationError(message: ErrorMessage.badRequest, statusCode: -1)
             }
             
             //Status code validation
             switch httpResponse.statusCode {
             case 200...299:
                 break
-            case 401:
-                throw NetworkError.unauthorized
-            case 404:
-                throw NetworkError.notFound
+            case 400...499:
+                throw handleAPIErrorResponse(data: data, httpResponse: httpResponse, statusCode: httpResponse.statusCode)
             case 500...599:
-                throw NetworkError.serverError
+                throw handleAPIErrorResponse(data: data, httpResponse: httpResponse, statusCode: httpResponse.statusCode)
             default:
-                throw NetworkError.httpError(statusCode: httpResponse.statusCode, message: "Unexpected error")
+                throw ApplicationError(message: ErrorMessage.unexpectedError, statusCode: httpResponse.statusCode)
             }
             
             //Decoding data
@@ -77,13 +75,31 @@ class Webservice: NetworkService {
             do {
                 return try decoder.decode(T.self, from: data)
             } catch {
-                throw NetworkError.decodingError
+                throw ApplicationError(message: ErrorMessage.decodingError, statusCode: -1)
             }
         } catch let error as URLError {
             if error.code == .notConnectedToInternet || error.code == .timedOut {
-                throw NetworkError.connectionError
+                throw ApplicationError(message: ErrorMessage.connectionError, statusCode: -1)
             }
             throw error
+        }
+    }
+}
+
+//MARK: - Private API
+extension Webservice {
+    
+    private func handleAPIErrorResponse(data: Data, httpResponse: HTTPURLResponse, statusCode: Int) -> ApplicationError {
+        do {
+            let errorResponse = try JSONDecoder().decode(GitHubError.self, from: data)
+            return ApplicationError(message: errorResponse.message, statusCode: statusCode)
+        } catch {
+            if statusCode == 401 {
+                return ApplicationError(message: ErrorMessage.unauthorized, statusCode: statusCode)
+            } else if statusCode == 404 {
+                return ApplicationError(message: ErrorMessage.notFound, statusCode: statusCode)
+            }
+            return ApplicationError(message: ErrorMessage.serverError, statusCode: statusCode)
         }
     }
 }
