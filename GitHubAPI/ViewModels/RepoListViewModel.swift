@@ -31,14 +31,8 @@ extension RepoListViewModel {
             await MainActor.run {
                 self.repoItems = repos.map { RepoDetailsViewModel(repo: $0) }
             }
-        } catch let error as ApplicationError {
-            await MainActor.run {
-                self.error = error
-            }
         } catch {
-            await MainActor.run {
-                self.error = ApplicationError(message: "\(error.localizedDescription)", statusCode: -1)
-            }
+            self.error = ApplicationError.from(error: error)
         }
     }
 }

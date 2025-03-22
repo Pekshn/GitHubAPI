@@ -36,13 +36,9 @@ extension RepoDetailsViewModel {
             await MainActor.run {
                 self.repoDetails = details
             }
-        } catch let error as ApplicationError {
-            await MainActor.run {
-                self.error = error
-            }
         } catch {
             await MainActor.run {
-                self.error = ApplicationError(message: "\(error.localizedDescription)", statusCode: -1)
+                self.error = ApplicationError.from(error: error)
             }
         }
     }
@@ -54,14 +50,8 @@ extension RepoDetailsViewModel {
             await MainActor.run {
                 self.tags = tags
             }
-        } catch let error as ApplicationError {
-            await MainActor.run {
-                self.error = error
-            }
         } catch {
-            await MainActor.run {
-                self.error = ApplicationError(message: "\(error.localizedDescription)", statusCode: -1)
-            }
+            self.error = ApplicationError.from(error: error)
         }
     }
 }

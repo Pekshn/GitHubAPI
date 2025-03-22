@@ -14,3 +14,15 @@ struct ApplicationError: Error, Identifiable {
     let message: String
     let statusCode: Int
 }
+
+//MARK: - Public API
+extension ApplicationError {
+    
+    static func from(error: Error) -> ApplicationError {
+        if let appError = error as? ApplicationError {
+            return appError
+        } else {
+            return ApplicationError(message: error.localizedDescription, statusCode: -1)
+        }
+    }
+}
