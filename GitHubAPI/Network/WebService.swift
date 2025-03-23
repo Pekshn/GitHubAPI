@@ -7,11 +7,11 @@
 
 import Foundation
 
-class Webservice: NetworkService {
+class WebService: NetworkService {
     
     //MARK: - Properties
     private var session: URLSession
-    static let shared = Webservice(session: .shared)
+    static let shared = WebService(session: .shared)
     
     //MARK: - Init
     private init(session: URLSession = .shared) {
@@ -82,12 +82,14 @@ class Webservice: NetworkService {
                 throw ApplicationError(message: Localization.errorConnection, statusCode: -1)
             }
             throw error
+        } catch {
+            throw error
         }
     }
 }
 
 //MARK: - Private API
-extension Webservice {
+extension WebService {
     
     private func handleAPIErrorResponse(data: Data, httpResponse: HTTPURLResponse, statusCode: Int) -> ApplicationError {
         do {

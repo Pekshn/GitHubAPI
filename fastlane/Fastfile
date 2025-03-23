@@ -6,8 +6,7 @@ platform :ios do
   lane :tests do
     run_tests(
       devices: ["iPhone 16 Pro"],
-      scheme: "GitHubAPI",
-      skip_testing: ["GitHubAPIUITests"]
+      scheme: "GitHubAPI"
     )
   end
 

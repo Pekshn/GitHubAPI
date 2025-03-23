@@ -23,13 +23,6 @@
         "identifier" : "949E75972D902D8E0068DF40",
         "name" : "GitHubAPITests"
       }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:GitHubAPI.xcodeproj",
-        "identifier" : "949E76052D902F460068DF40",
-        "name" : "GitHubAPIUITests"
-      }
     }
   ],
   "version" : 1
