@@ -21,7 +21,7 @@ struct TagsPlaceholderView: View {
                 .frame(width: 150, height: 150)
                 .foregroundColor(.gray.opacity(0.6))
             
-            Text(tagsLoading ? "Loading tags..." : "No tags found.")
+            Text(tagsLoading ? Localization.loadingTags : Localization.noTags)
                 .font(.title3)
                 .foregroundColor(.gray)
                 .padding(.top, 20)

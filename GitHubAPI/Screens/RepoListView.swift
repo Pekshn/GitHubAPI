@@ -51,9 +51,9 @@ struct RepoListView: View {
             .task {
                 await viewModel.fetchUserRepos(username: username)
             } //: task
-            .navigationTitle("Repos of \(username)")
+            .navigationTitle(String(format: Localization.reposOfX, username))
             .alert(item: $viewModel.error) { error in
-                Alert(title: Text("Error"), message: Text("\(error.message)"), dismissButton: .default(Text("OK")))
+                Alert(title: Text(Localization.error), message: Text("\(error.message)"), dismissButton: .default(Text(Localization.ok)))
             }
         } //: NavigationStack
         .tint(colorScheme == .dark ? .white : .black)

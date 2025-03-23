@@ -32,7 +32,7 @@ struct TagItemView: View {
             .padding(.top, 5)
             
             HStack {
-                Text("Commit: \(tag.commit.sha)")
+                Text(String(format: Localization.commitX, tag.commit.sha))
                     .font(.subheadline)
                     .foregroundColor(.primary)
                 

@@ -18,7 +18,7 @@ struct PlaceholderView: View {
                 .frame(width: 150, height: 150)
                 .foregroundColor(.gray)
             
-            Text("No repositories found.")
+            Text(Localization.noReposFound)
                 .font(.title3)
                 .foregroundColor(.gray)
         } //: VStack

@@ -16,7 +16,7 @@ struct TagsTitleView: View {
                 .frame(height: 1)
                 .padding(.vertical)
             
-            Text("Tags:")
+            Text(Localization.tags)
                 .font(.system(.title, weight: .bold))
                 .padding(.vertical, 10)
                 .padding(.horizontal)

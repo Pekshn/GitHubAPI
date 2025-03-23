@@ -1,0 +1,33 @@
+/* 
+  Localizable.strings
+  GitHubAPI
+
+  Created by Petar  on 23.3.25..
+  
+*/
+
+//MARK: - Error
+"Error.Error" = "Error";
+"Error.Bad Url" = "Bad URL value";
+"Error.Bad Request" = "Bad URL request";
+"Error.Encoding" = "Encoding error occurred";
+"Error.Decoding" = "Decoding error occurred";
+"Error.Unauthorized" = "Unauthorized access";
+"Error.Not found" = "Resource not found";
+"Error.Server" = "Server error occurred";
+"Error.Connection" = "Network connection error";
+"Error.Unexpected" = "Unexpected error";
+
+"OK" = "OK";
+"Repos of x" = "Repos of %@";
+"Repos count: x" = "Repositories count: %d";
+"Copyright Petar" = "Copyright © Petar Novakovic \nAll right reserved";
+"Forks:" = "Forks:";
+"Watchers:" = "Watchers:";
+"No repos found" = "No repositories found.";
+"Open issues count: x" = "Open issues count: %@";
+"Repo:" = "Repo:";
+"Commit: x" = "Commit: %@";
+"Loading tags" = "Loading tags...";
+"No tags" = "No tags found.";
+"Tags:" = "Tags:";

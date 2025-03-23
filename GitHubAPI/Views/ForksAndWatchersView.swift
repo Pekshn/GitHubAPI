@@ -16,7 +16,7 @@ struct ForksAndWatchersView: View {
     var body: some View {
         HStack {
             VStack(alignment: .center, spacing: 5) {
-                Text("Forks:")
+                Text(Localization.forks)
                 Text(viewModel.forksCount)
             } //: VStack
             .padding(.horizontal, 30)
@@ -24,7 +24,7 @@ struct ForksAndWatchersView: View {
             Spacer()
             
             VStack(alignment: .center, spacing: 5) {
-                Text("Watchers:")
+                Text(Localization.watchers)
                 Text(viewModel.watchersCount)
             } //: VStack
             .padding(.horizontal, 30)
@@ -36,5 +36,5 @@ struct ForksAndWatchersView: View {
 
 //MARK: - Preview
 #Preview {
-    ForksAndWatchersView(viewModel: RepoDetailsViewModel(repo: Repo(id: 64778136, name: "linguist", openIssuesCount: 21, owner: Owner(name: "octocat"), avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4")))
+    ForksAndWatchersView(viewModel: RepoDetailsViewModel(repo: Repo(id: 64778136, name: "linguist", openIssuesCount: 21, owner: Owner(name: "octocat", avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4"))))
 }

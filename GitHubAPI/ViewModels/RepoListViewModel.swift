@@ -26,18 +26,15 @@ class RepoListViewModel: ObservableObject {
 extension RepoListViewModel {
     
     //Fetch User Repos
+    @MainActor
     func fetchUserRepos(username: String) async {
         self.isLoading = true
         do {
             let repos = try await repoListService.fetchUserRepos(username: username)
-            await MainActor.run {
-                self.repoItems = repos.map { RepoDetailsViewModel(repo: $0) }
-                self.reposCount = "Repositories count: \(repos.count)"
-            }
+            self.repoItems = repos.map { RepoDetailsViewModel(repo: $0) }
+            self.reposCount = String(format: Localization.reposCountX, repos.count)
         } catch {
-            await MainActor.run {
-                self.error = ApplicationError.from(error: error)
-            }
+            self.error = ApplicationError.from(error: error)
         }
         self.isLoading = false
     }

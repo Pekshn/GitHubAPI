@@ -14,7 +14,7 @@ struct CopyrightView: View {
     
     //MARK: - Body
     var body: some View {
-        Text("Copyright ©  Petar Novakovic \nAll right reserved")
+        Text(Localization.copyrightPetar)
             .font(.system(.footnote, weight: .bold))
             .multilineTextAlignment(.center)
             .padding(.top, 10)

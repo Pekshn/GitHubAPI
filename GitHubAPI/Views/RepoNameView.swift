@@ -15,7 +15,7 @@ struct RepoNameView: View {
     //MARK: - Body
     var body: some View {
         VStack {
-            Text("Repo:")
+            Text(Localization.repo)
                 .padding(.top, 10)
             
             Text(repoName)

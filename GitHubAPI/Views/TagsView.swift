@@ -32,5 +32,5 @@ struct TagsView: View {
 
 //MARK: - Preview
 #Preview {
-    TagsView(viewModel: RepoDetailsViewModel(repo: Repo(id: 64778136, name: "linguist", openIssuesCount: 21, owner: Owner(name: "octocat"), avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4")))
+    TagsView(viewModel: RepoDetailsViewModel(repo: Repo(id: 64778136, name: "linguist", openIssuesCount: 21, owner: Owner(name: "octocat", avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4"))))
 }

@@ -39,7 +39,7 @@ class Webservice: NetworkService {
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: params, options: [])
             } catch {
-                throw ApplicationError(message: ErrorMessage.encodingError, statusCode: -1)
+                throw ApplicationError(message: Localization.errorEncoding, statusCode: -1)
             }
         }
         
@@ -53,7 +53,7 @@ class Webservice: NetworkService {
             
             //Response validation
             guard let httpResponse = response as? HTTPURLResponse else {
-                throw ApplicationError(message: ErrorMessage.badRequest, statusCode: -1)
+                throw ApplicationError(message: Localization.errorBarRequest, statusCode: -1)
             }
             
             //Status code validation
@@ -65,7 +65,7 @@ class Webservice: NetworkService {
             case 500...599:
                 throw handleAPIErrorResponse(data: data, httpResponse: httpResponse, statusCode: httpResponse.statusCode)
             default:
-                throw ApplicationError(message: ErrorMessage.unexpectedError, statusCode: httpResponse.statusCode)
+                throw ApplicationError(message: Localization.errorUnexpected, statusCode: httpResponse.statusCode)
             }
             
             //Decoding data
@@ -75,11 +75,11 @@ class Webservice: NetworkService {
             do {
                 return try decoder.decode(T.self, from: data)
             } catch {
-                throw ApplicationError(message: ErrorMessage.decodingError, statusCode: -1)
+                throw ApplicationError(message: Localization.errorDecoding, statusCode: -1)
             }
         } catch let error as URLError {
             if error.code == .notConnectedToInternet || error.code == .timedOut {
-                throw ApplicationError(message: ErrorMessage.connectionError, statusCode: -1)
+                throw ApplicationError(message: Localization.errorConnection, statusCode: -1)
             }
             throw error
         }
@@ -95,11 +95,11 @@ extension Webservice {
             return ApplicationError(message: errorResponse.message, statusCode: statusCode)
         } catch {
             if statusCode == 401 {
-                return ApplicationError(message: ErrorMessage.unauthorized, statusCode: statusCode)
+                return ApplicationError(message: Localization.errorUnauthorized, statusCode: statusCode)
             } else if statusCode == 404 {
-                return ApplicationError(message: ErrorMessage.notFound, statusCode: statusCode)
+                return ApplicationError(message: Localization.errorNotFound, statusCode: statusCode)
             }
-            return ApplicationError(message: ErrorMessage.serverError, statusCode: statusCode)
+            return ApplicationError(message: Localization.errorServer, statusCode: statusCode)
         }
     }
 }

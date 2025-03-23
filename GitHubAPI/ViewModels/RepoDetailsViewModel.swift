@@ -24,7 +24,7 @@ class RepoDetailsViewModel: ObservableObject, Identifiable {
     var repoName: String { repo.name }
     var openIssuesCount: String { "\(repo.openIssuesCount)" }
     var username: String { repo.owner.name }
-    var avatarString: String? { repo.avatarUrl }
+    var avatarString: String? { repo.owner.avatarUrl }
     
     //MARK: - Init
     init(repo: Repo, repoDetailsService: RepoDetailsService = RepoDetailsService(), repoTagsService: RepoTagsService = RepoTagsService()) {
@@ -38,32 +38,26 @@ class RepoDetailsViewModel: ObservableObject, Identifiable {
 extension RepoDetailsViewModel {
     
     //Fetch Details
+    @MainActor
     func fetchDetails() async {
         do {
             let details = try await repoDetailsService.fetchRepoDetails(owner: repo.owner.name, repoName: repo.name)
-            await MainActor.run {
-                self.forksCount = "\(details.forksCount)"
-                self.watchersCount = "\(details.watchersCount)"
-            }
+            self.forksCount = "\(details.forksCount)"
+            self.watchersCount = "\(details.watchersCount)"
         } catch {
-            await MainActor.run {
-                self.error = ApplicationError.from(error: error)
-            }
+            self.error = ApplicationError.from(error: error)
         }
     }
     
     //Fetch Tags
+    @MainActor
     func fetchTags() async {
         self.tagsLoading = true
         do {
             let tags = try await repoTagsService.fetchRepoTags(owner: repo.owner.name, repoName: repo.name)
-            await MainActor.run {
-                self.tags = tags
-            }
+            self.tags = tags
         } catch {
-            await MainActor.run {
-                self.error = ApplicationError.from(error: error)
-            }
+            self.error = ApplicationError.from(error: error)
         }
         self.tagsLoading = false
     }

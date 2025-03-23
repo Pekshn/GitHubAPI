@@ -76,7 +76,7 @@ struct RepoDetailsView: View {
             await viewModel.fetchTags()
         } //: task
         .alert(item: $viewModel.error) { error in
-            Alert(title: Text("Error"), message: Text("\(error.message)"), dismissButton: .default(Text("OK")))
+            Alert(title: Text(Localization.error), message: Text("\(error.message)"), dismissButton: .default(Text(Localization.ok)))
         } //: alert
     }
 }
@@ -84,6 +84,6 @@ struct RepoDetailsView: View {
 //MARK: - Preview
 #Preview {
     NavigationStack {
-        RepoDetailsView(viewModel: RepoDetailsViewModel(repo: Repo(id: 64778136, name: "linguist", openIssuesCount: 21, owner: Owner(name: "octocat"), avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4")))
+        RepoDetailsView(viewModel: RepoDetailsViewModel(repo: Repo(id: 64778136, name: "linguist", openIssuesCount: 21, owner: Owner(name: "octocat", avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4"))))
     }
 }

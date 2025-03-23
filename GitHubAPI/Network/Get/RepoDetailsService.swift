@@ -20,7 +20,7 @@ class RepoDetailsService {
     //MARK: - API Call
     func fetchRepoDetails(owner: String, repoName: String) async throws -> RepoDetails {
         guard let url = RequestEndpoint.repoDetails(owner: owner, repoName: repoName) else {
-            throw ApplicationError(message: ErrorMessage.badUrl, statusCode: -1)
+            throw ApplicationError(message: Localization.errorBadurl, statusCode: -1)
         }
         let config = RequestConfig(url: url)
         return try await networkService.makeRequest(config: config, responseType: RepoDetails.self)
